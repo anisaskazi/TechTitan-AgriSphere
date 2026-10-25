@@ -1,0 +1,5 @@
+const CACHE='krishimitra-one-v2';
+const ASSETS=['./','./index.html','./app.js','./data.js','./logic.js','./styles.css','./assets/logo.svg','./assets/field-hero.svg','./assets/farmland-sunrise.webp','./assets/feature-01.webp','./assets/feature-02.webp','./assets/feature-03.webp','./assets/feature-04.webp','./assets/feature-05.webp','./assets/feature-06.webp','./assets/feature-07.webp','./assets/feature-08.webp','./manifest.webmanifest'];
+self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));self.skipWaiting()});
+self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim()});
+self.addEventListener('fetch',event=>{const req=event.request;if(req.method!=='GET'||new URL(req.url).origin!==self.location.origin)return;event.respondWith(caches.match(req).then(cached=>cached||fetch(req).then(response=>{if(response.ok){let copy=response.clone();caches.open(CACHE).then(c=>c.put(req,copy))}return response}).catch(()=>req.mode==='navigate'?caches.match('./index.html'):Response.error())))});

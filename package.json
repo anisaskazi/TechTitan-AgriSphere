@@ -1,0 +1,9 @@
+{
+  "name": "krishimitra-one",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Farmer-first photo-rich farm planning and operations platform",
+  "scripts": {"dev":"node scripts/serve.mjs", "start":"node scripts/serve.mjs", "build":"node scripts/build.mjs", "test":"node --test tests/*.test.mjs"},
+  "engines": {"node":">=18"}
+}

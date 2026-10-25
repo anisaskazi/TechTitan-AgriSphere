@@ -1,0 +1,14 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');const read=name=>fs.readFileSync(path.join(root,name),'utf8');
+test('site entry contains real application mount and scripts',()=>{let html=read('index.html');assert.match(html,/id="app"/);assert.match(html,/app\.js/);assert.match(html,/styles\.css/)});
+test('site has accessible mobile viewport',()=>assert.match(read('index.html'),/name="viewport"/));
+test('farm is readable without JavaScript-only external library CDN',()=>assert.doesNotMatch(read('index.html'),/cdnjs|unpkg|jsdelivr/));
+test('site includes manifest and offline service worker',()=>{assert.ok(fs.existsSync(path.join(root,'manifest.webmanifest')));assert.match(read('app.js'),/serviceWorker\.register/);assert.ok(fs.existsSync(path.join(root,'sw.js')))});
+test('entry has responsive layout styles',()=>assert.match(read('styles.css'),/@media\(max-width:700px\)/));
+test('site has no fake checkout function',()=>assert.doesNotMatch(read('app.js'),/stripe\.checkout|paymentIntent/));
+test('marketplace is visibly disclosed as drafts',()=>assert.match(read('app.js'),/Public buying and selling is not enabled yet/));
+test('crop health does not masquerade as diagnosis',()=>assert.match(read('app.js'),/not an automated disease diagnosis/));
+test('weather has accessible Open-Meteo geocoding API',()=>assert.match(read('app.js'),/geocoding-api\.open-meteo\.com/));
+test('CI workflow exists',()=>assert.ok(fs.existsSync(path.join(root,'.github/workflows/ci.yml'))));
+test('multi-stage Dockerfile exists',()=>assert.match(read('Dockerfile'),/FROM nginx:/));
+test('no hardcoded private API credentials',()=>assert.doesNotMatch(read('app.js'),/sk-[A-Za-z0-9]{20,}/));

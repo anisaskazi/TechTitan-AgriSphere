@@ -1,0 +1,2 @@
+import fs from 'node:fs/promises';import path from 'node:path';import {fileURLToPath} from 'node:url';
+const base=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');const dest=path.join(base,'dist');await fs.rm(dest,{recursive:true,force:true});await fs.mkdir(dest,{recursive:true});for(const name of ['index.html','app.js','data.js','logic.js','styles.css','assets','manifest.webmanifest','sw.js','netlify.toml','nginx.conf']){await fs.cp(path.join(base,name),path.join(dest,name),{recursive:true});}console.log('Build successful: dist/');

@@ -1,0 +1,7 @@
+KRISHIMITRA ONE — HOSTING-READY WEBSITE
+
+This folder is a PREBUILT static site. There is NO package.json.
+For local preview: use VS Code Live Server on index.html.
+For Netlify: https://app.netlify.com/drop -> upload this extracted folder.
+The website uses browser-local records and requires internet for live weather.
+No online user accounts, e-commerce checkout or validated disease detection exist in this version.

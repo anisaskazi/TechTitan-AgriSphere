@@ -1,0 +1,15 @@
+export const emptyState=()=>({profile:{name:'',location:'',country:'India',currency:'INR',area:'',unit:'acre',soilType:'',notes:''},soil:[],plans:[],tasks:[],water:[],observations:[],harvests:[],quotes:[],lots:[],ledger:[],listings:[],favorites:[],settings:{lang:'en'},weatherLocation:null});
+export const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export let displayCurrency='INR';
+export const setCurrency=(currency)=>{displayCurrency=['INR','USD','EUR','GBP','BDT','NPR','PKR','LKR','AUD','CAD'].includes(currency)?currency:'INR'};
+export const money=(n,currency=displayCurrency)=>new Intl.NumberFormat('en-IN',{style:'currency',currency,maximumFractionDigits:0}).format(Number(n)||0);
+export const num=(n)=>new Intl.NumberFormat('en-IN',{maximumFractionDigits:1}).format(Number(n)||0);
+export const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+export const uid=()=>globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+export const total=(rows,field)=>rows.reduce((a,r)=>a+(Number(r[field])||0),0);
+export const netReturn=(price,qty,transport=0,other=0)=>Math.round((Number(price)||0)*(Number(qty)||0)-(Number(transport)||0)-(Number(other)||0));
+export const yieldEstimate=(area,rate)=>Math.round((Number(area)||0)*(Number(rate)||0)*100)/100;
+export const scoreSoilPH=p=>p===''||p===undefined?'No pH recorded':Number(p)<5.5?'Acidic range':Number(p)>8.5?'Alkaline range':'Within broad agricultural range';
+export const dueLabel=date=>!date?'No date':date<today()?'Overdue':date===today()?'Today':'Upcoming';
+export const safeState=raw=>{const model=emptyState();if(!raw||typeof raw!=='object'||Array.isArray(raw))return model;for(const key of Object.keys(model)){if(Array.isArray(model[key])){model[key]=Array.isArray(raw[key])?raw[key].filter(x=>x&&typeof x==='object'&&!Array.isArray(x)).slice(0,1500):[];}else if(key==='profile'||key==='settings')model[key]={...model[key],...(raw[key]&&typeof raw[key]==='object'&&!Array.isArray(raw[key])?raw[key]:{})};else model[key]=raw[key]||null;}return model;};
+export const seedReading=()=>[{label:'Your first farm',value:'Create a farm profile',route:'farm'}, {label:'Plan your crops',value:'Browse crop catalogue',route:'crops'}, {label:'Organize the work',value:'Add a farm task',route:'tasks'}];
