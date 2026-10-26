@@ -1,5 +1,6 @@
 export const emptyState=()=>({profile:{name:'',location:'',country:'India',currency:'INR',area:'',unit:'acre',soilType:'',notes:''},soil:[],plans:[],tasks:[],water:[],observations:[],harvests:[],quotes:[],lots:[],ledger:[],listings:[],favorites:[],settings:{lang:'en'},weatherLocation:null});
 export const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export const filterCrops=(items,{query='',category='All',season='All',sort='name'}={})=>{const normalizedQuery=String(query).trim().toLowerCase();const filtered=items.filter(c=>(category==='All'||c.group===category)&&(season==='All'||c.season===season)&&`${c.name} ${c.group} ${c.detail}`.toLowerCase().includes(normalizedQuery));if(sort==='duration')filtered.sort((a,b)=>a.duration-b.duration);else if(sort==='water')filtered.sort((a,b)=>a.water.localeCompare(b.water));else filtered.sort((a,b)=>a.name.localeCompare(b.name));return filtered};
 export let displayCurrency='INR';
 export const setCurrency=(currency)=>{displayCurrency=['INR','USD','EUR','GBP','BDT','NPR','PKR','LKR','AUD','CAD'].includes(currency)?currency:'INR'};
 export const money=(n,currency=displayCurrency)=>new Intl.NumberFormat('en-IN',{style:'currency',currency,maximumFractionDigits:0}).format(Number(n)||0);
